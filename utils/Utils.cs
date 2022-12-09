@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Utils
 {
-    public static class Utils
+    public static class ReadFile
     {
         public static string[] GetInput(int day)
         {
