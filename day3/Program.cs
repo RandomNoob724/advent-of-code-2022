@@ -1,35 +1,52 @@
 ﻿string[] inputData = Utils.ReadFile.GetInput(3);
 
-HashSet<char> faultyPackedItems = new HashSet<char>();
+string faultyPackedItems = String.Empty;
+string groupBadges = String.Empty;
+
+int CharValue(char c) => c < 97 ? c - 65 + 27 : c - 97 + 1;
 
 foreach (string input in inputData)
 {
     string firstRucksack = input.Substring(0, (int)(input.Length / 2));
     string secondRucksack = input.Substring((int)(input.Length / 2), (int)(input.Length / 2));
 
-    foreach(char letter in firstRucksack)
+    foreach (char letter in firstRucksack)
     {
-        if(secondRucksack.Contains(letter))
+        if (secondRucksack.Contains(letter))
         {
-            faultyPackedItems.Add(letter);
+            faultyPackedItems += letter;
+            break;
         }
     }
 }
-int score = 0;
-foreach(char letter in faultyPackedItems)
+
+var dataB = inputData
+    .Chunk(3);
+
+foreach(var group in dataB)
 {
-    int unicode = letter;
-    if(unicode >= 97)
+    string firstRucksack = group.First();
+    foreach(var letter in firstRucksack)
     {
-        Console.WriteLine($"{(char)(unicode)} {unicode - 96}");
-        score += unicode - 96;
-    }
-    else
-    {
-        Console.WriteLine($"{(char)(unicode)} {unicode - 38}");
-        score += unicode - 38;
+        if (group[1].Contains(letter) && group[2].Contains(letter))
+        {
+            groupBadges += letter;
+            break;
+        }
     }
 }
 
-Console.WriteLine(faultyPackedItems);
+int score = 0;
+foreach (char letter in faultyPackedItems)
+{
+    score += CharValue(letter);
+}
+
+int groupScore = 0;
+foreach (char letter in groupBadges)
+{
+    groupScore += CharValue(letter);
+}
+
 Console.WriteLine(score);
+Console.WriteLine(groupScore);
